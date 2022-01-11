@@ -26,7 +26,6 @@
               </div>
               <div class="img mt-1"><img src="../assets/img.jpg" alt=""></div>
               <div class="post text-overflow mt-1 h5 text-center font-weight-bold">{{post.title}}</div>
-              <div class="post text-overflow text-center">{{post.text}}</div>
               <div class="post mt-1 text-right grey--text text--lighten-1"> {{ new Date(post.created_at).toLocaleDateString("ru-RU", {hour: 'numeric', minute: 'numeric', second: 'numeric'}) }}</div>
               <div class="post more mt-1 text-right" link @click="viewPost(post.id)">read more →</div>
             </v-card>
@@ -139,11 +138,11 @@
    },
 
     methods: {
-     ...mapActions(['PAGINATION', 'GET_POSTS', 'GET_POST', 'PUT_POST', 'DELETE_POST']),
+     ...mapActions(['GET_POSTS', 'GET_POST', 'PUT_POST', 'DELETE_POST']),
      pagination(value) {
       this.page = value
       const url = 'posts?page=' + value + '&per_page=3'
-     this.PAGINATION(url)
+     this.GET_POSTS(url)
      },
       viewPost(id) {
         const url = 'posts/' + id
@@ -174,7 +173,7 @@
         this.title = ''
         this.text = ''
         const url = 'posts?page=' + this.page + '&per_page=3'
-        this.PAGINATION(url)
+        this.GET_POSTS(url)
       })
      },
 
@@ -184,10 +183,10 @@
         .then(() => {
           if(this.POSTS[1] || (this.page == 1)) {
          const url = 'posts?page=' + this.page + '&per_page=3'
-         this.PAGINATION(url)
+         this.GET_POSTS(url)
           } else {
          const url = 'posts?page=' + (this.page-1) + '&per_page=3'
-         this.PAGINATION(url)
+         this.GET_POSTS(url)
          this.page = (this.page-1)
           }
         })
@@ -200,7 +199,8 @@
      },
 
      mounted() {
-    this.GET_POSTS()
+    const url = 'posts?page=' + this.page + '&per_page=3'
+    this.GET_POSTS(url)
   }
 
  }
